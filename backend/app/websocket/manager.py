@@ -131,7 +131,21 @@ async def human_intervention(sid, data):
         }, room=sid)
         return
     
-    # TODO: Process human intervention and update agent workflow
+    # Store human intervention as a message
+    from app.database import SessionLocal
+    from app.models.message import Message, AgentRole
+    
+    db = SessionLocal()
+    try:
+        human_message = Message(
+            task_id=task_id,
+            agent_role=AgentRole.HUMAN,
+            content=message
+        )
+        db.add(human_message)
+        db.commit()
+    finally:
+        db.close()
     
     # Broadcast intervention to all task subscribers
     await connection_manager.broadcast_to_task(task_id, "human_intervention", {

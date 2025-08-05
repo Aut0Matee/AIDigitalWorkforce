@@ -55,7 +55,14 @@ async def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_task)
     
-    # TODO: Trigger agent workflow processing
+    # Trigger agent workflow processing
+    from app.services.task_service import get_task_service
+    task_service = get_task_service()
+    
+    # Process task in background
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.create_task(task_service.process_task_async(db_task.id))
     
     return db_task
 
