@@ -80,11 +80,46 @@ AI Digital Workforce is an open-source platform that demonstrates the power of m
 
 #### Backend Setup
 
+**Linux/macOS:**
 ```bash
 cd backend
-python -m venv venv
+./setup.sh  # This will create venv and install all dependencies
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Run the backend
+uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
+```
+
+**Windows:**
+```bash
+cd backend
+setup.bat  # This will create venv and install all dependencies
+
+# Activate virtual environment
+venv\Scripts\activate
+
+# Run the backend
+uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
+```
+
+**Manual Setup:**
+```bash
+cd backend
+python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+
+# Install dependencies (latest versions)
+pip install fastapi uvicorn[standard] pydantic pydantic-settings
+pip install sqlalchemy alembic python-socketio python-multipart
+pip install openai langchain langgraph tavily-python
+pip install python-dotenv httpx aiofiles jinja2
+pip install passlib python-jose[cryptography]
+pip install pytest pytest-asyncio black flake8 mypy
+
+# Generate requirements.txt
+pip freeze > requirements.txt
 
 # Set up environment
 cp .env.example .env
