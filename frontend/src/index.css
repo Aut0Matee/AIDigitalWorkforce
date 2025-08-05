@@ -1,12 +1,25 @@
 @import "tailwindcss";
 
+/* Theme customization for Tailwind v4 */
+@theme {
+  /* Extend colors */
+  --color-primary-50: oklch(97.78% 0.014 237.69);
+  --color-primary-500: oklch(61.42% 0.238 250.29);
+  --color-primary-600: oklch(53.24% 0.241 253.31);
+  --color-primary-700: oklch(49.72% 0.209 252.91);
+  
+  /* Custom animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-bounce-slow: bounce 2s infinite;
+}
+
 /* Custom component styles */
 .agent-pulse {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: var(--animate-pulse-slow);
 }
 
 .agent-bounce {
-  animation: bounce 2s infinite;
+  animation: var(--animate-bounce-slow);
 }
 
 /* Custom scrollbar */
