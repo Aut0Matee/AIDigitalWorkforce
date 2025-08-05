@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Loader2, Trash2 } from 'lucide-react';
-import { Task, Message } from '../types';
+import type { Task, Message } from '../types';
 import { taskApi, messageApi } from '../services/api';
 import { socketService } from '../services/socket';
 import { ChatWindow } from '../components/chat/ChatWindow';

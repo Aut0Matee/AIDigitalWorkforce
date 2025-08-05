@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Loader2 } from 'lucide-react';
-import { Message } from '../../types';
+import type { Message } from '../../types';
 import { MessageBubble } from './MessageBubble';
 import { messageApi } from '../../services/api';
 import { socketService } from '../../services/socket';

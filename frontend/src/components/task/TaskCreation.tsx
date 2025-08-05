@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, Loader2 } from 'lucide-react';
 import { taskApi } from '../../services/api';
-import { TaskCreate } from '../../types';
+import type { TaskCreate } from '../../types';
 
 export const TaskCreation: React.FC = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, PenTool, Microscope, User, Bot } from 'lucide-react';
-import { Message } from '../../types';
+import type { Message } from '../../types';
 
 interface AgentAvatarProps {
   role: Message['agent_role'];

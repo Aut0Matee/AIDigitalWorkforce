@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from '../../types';
+import type { Message } from '../../types';
 import { AgentAvatar } from './AgentAvatar';
 import { formatDistanceToNow } from '../../utils/date';
 

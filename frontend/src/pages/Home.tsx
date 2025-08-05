@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { TaskCreation } from '../components/task/TaskCreation';
 import { TaskList } from '../components/task/TaskList';
 import { taskApi } from '../services/api';
-import { Task } from '../types';
+import type { Task } from '../types';
 
 export const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, FileText, Calendar } from 'lucide-react';
-import { Task } from '../../types';
+import type { Task } from '../../types';
 import { TaskStatus } from './TaskStatus';
 import { formatDate } from '../../utils/date';
 

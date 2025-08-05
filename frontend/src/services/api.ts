@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Task, TaskCreate, TaskListResponse, Message, MessageListResponse } from '../types';
+import type { Task, TaskCreate, TaskListResponse, Message, MessageListResponse } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
