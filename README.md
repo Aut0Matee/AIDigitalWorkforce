@@ -1,207 +1,300 @@
 # 🤖 AI Digital Workforce
 
-> **Multi-Agent AI Collaboration Platform** - Watch AI agents work together in real-time to complete complex tasks.
+> **Multi-Agent AI Collaboration Platform** - Watch AI agents work together in real-time to complete complex tasks through intelligent orchestration.
+
+<div align="center">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Node.js 18+](https://img.shields.io/badge/node-18+-green.svg)](https://nodejs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-00a393.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18+-61dafb.svg)](https://reactjs.org/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 20+](https://img.shields.io/badge/node-20+-green.svg)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-00a393.svg)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19+-61dafb.svg)](https://reactjs.org/)
+
+**Built by [AutoMate](https://automate.com) - Your AI Automation Partner**
+
+[🚀 Quick Start](#-quick-start-with-docker) • [📚 Documentation](#-documentation) • [🎥 Demo](#-see-it-in-action) • [💬 Discord](https://discord.gg/automate)
+
+</div>
+
+---
 
 ## 🌟 Overview
 
-AI Digital Workforce is an open-source platform that demonstrates the power of multi-agent AI collaboration. Watch as specialized AI agents—**Researcher**, **Writer**, and **Analyst**—work together in real-time to complete complex tasks, just like a human team would.
+**AI Digital Workforce** is a cutting-edge platform by **AutoMate** that showcases the power of multi-agent AI collaboration using LangGraph orchestration. Watch as specialized AI agents work together like a real team, autonomously completing complex tasks while you maintain full visibility and control.
 
-### ✨ Key Features
+### 🎯 What Makes This Special?
 
-- 🤝 **Real-time Agent Collaboration** - Watch agents communicate and build on each other's work
-- 🔍 **Intelligent Web Research** - Researcher agent gathers current information from the web
-- ✍️ **Human-like Content Creation** - Writer agent produces high-quality, contextual content
-- 🔬 **Quality Analysis & Refinement** - Analyst agent reviews and improves outputs
-- 💬 **Human Intervention** - Jump in anytime to guide or redirect the agents
-- 📊 **Live Dashboard** - Monitor progress and agent interactions in real-time
-- 📄 **Export Ready** - Download results as PDF or Markdown
-- 🚀 **Docker Ready** - One-command deployment with Docker Compose
+Unlike traditional AI assistants, our platform employs **multiple specialized agents** that collaborate through an intelligent orchestrator, mimicking how human teams work together. Each agent has unique capabilities and they seamlessly hand off work to each other, creating a true digital workforce.
 
-## 🏗️ Architecture
+## ✨ Key Features
 
+<table>
+<tr>
+<td width="50%">
+
+### 🤝 **Multi-Agent Orchestration**
+- **LangGraph-powered** workflow management
+- **Researcher Agent**: Gathers real-time web data
+- **Writer Agent**: Creates professional content
+- **Analyst Agent**: Reviews and refines outputs
+- **Supervisor Pattern**: Intelligent task routing
+
+</td>
+<td width="50%">
+
+### 💡 **Smart Capabilities**
+- **Real-time Collaboration**: Watch agents communicate
+- **Human-in-the-Loop**: Intervene at any point
+- **Web Research**: Powered by Tavily API
+- **GPT-4o-mini**: Latest OpenAI model
+- **Export Options**: PDF & Markdown formats
+
+</td>
+</tr>
+</table>
+
+## 🏗️ Architecture & Tech Stack
+
+<div align="center">
+
+```mermaid
+graph TB
+    subgraph "Frontend - React 19 + Vite"
+        UI[React Components]
+        WS[Socket.IO Client]
+        MD[Markdown Renderer]
+    end
+    
+    subgraph "Backend - FastAPI + LangGraph"
+        API[REST API]
+        WSS[WebSocket Server]
+        ORC[LangGraph Orchestrator]
+    end
+    
+    subgraph "AI Agents"
+        RES[🔍 Researcher]
+        WRT[✍️ Writer]
+        ANL[🔬 Analyst]
+    end
+    
+    subgraph "Infrastructure"
+        DB[(MySQL 8.0)]
+        CACHE[Redis Cache]
+    end
+    
+    UI <--> API
+    WS <--> WSS
+    API <--> ORC
+    ORC <--> RES
+    ORC <--> WRT
+    ORC <--> ANL
+    API <--> DB
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   📱 Frontend    │    │   🔧 Backend     │    │   🤖 Agents      │
-│                 │    │                 │    │                 │
-│ • React + Vite  │◄──►│ • FastAPI       │◄──►│ • Researcher    │
-│ • Tailwind CSS  │    │ • WebSocket     │    │ • Writer        │
-│ • Socket.IO     │    │ • OpenAPI Docs  │    │ • Analyst       │
-│ • React Router  │    │ • SQLite DB     │    │ • LangGraph     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
 
-## 🚀 Quick Start
+</div>
+
+### 🛠️ Technologies Used
+
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | React 19, Vite, TypeScript, Material-UI, Tailwind CSS v4, Socket.IO Client |
+| **Backend** | FastAPI, Python 3.12, LangGraph, LangChain, SQLAlchemy, Pydantic |
+| **AI/ML** | OpenAI GPT-4o-mini, Tavily Search API, LangChain Tools |
+| **Database** | MySQL 8.0 (Production), SQLite (Development) |
+| **DevOps** | Docker, Docker Compose, Nginx, GitHub Actions |
+| **Monitoring** | Health checks, WebSocket ping/pong, Structured logging |
+
+## 🚀 Quick Start with Docker
+
+Get up and running in **under 5 minutes** with our Docker setup!
 
 ### Prerequisites
 
-- **Docker & Docker Compose** (recommended)
-- **OR** Python 3.11+ and Node.js 18+ for local development
-- **OpenAI API Key** - [Get here](https://platform.openai.com/api-keys)
-- **Tavily Search API Key** - [Get here](https://tavily.com/)
+- **Docker** 20.10+ ([Install](https://docs.docker.com/get-docker/))
+- **Docker Compose** 2.0+ ([Install](https://docs.docker.com/compose/install/))
+- **API Keys**:
+  - OpenAI API Key ([Get it here](https://platform.openai.com/api-keys))
+  - Tavily API Key ([Get it here](https://tavily.com/))
 
-### 🐳 Docker Setup (Recommended)
+### 🐳 One-Command Deployment
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/automate/ai-digital-workforce.git
-   cd ai-digital-workforce
-   ```
-
-2. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env and add your API keys
-   ```
-
-3. **Start the application**
-   ```bash
-   # Development mode (with hot reloading)
-   docker-compose -f docker-compose.dev.yml up --build
-
-   # Production mode
-   docker-compose up --build
-   ```
-
-4. **Access the application**
-   - 🌐 **Frontend**: http://localhost:3000
-   - 📚 **API Docs**: http://localhost:8000/docs
-   - 🔧 **Backend**: http://localhost:8000
-
-### 🔧 Local Development Setup
-
-<details>
-<summary>Click to expand local setup instructions</summary>
-
-#### Backend Setup
-
-**Linux/macOS:**
 ```bash
-cd backend
-./setup.sh  # This will create venv and install all dependencies
+# 1. Clone the repository
+git clone https://github.com/automate/ai-digital-workforce.git
+cd ai-digital-workforce
 
-# Activate virtual environment
-source venv/bin/activate
-
-# Run the backend
-uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
-```
-
-**Windows:**
-```bash
-cd backend
-setup.bat  # This will create venv and install all dependencies
-
-# Activate virtual environment
-venv\Scripts\activate
-
-# Run the backend
-uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
-```
-
-**Manual Setup:**
-```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies (latest versions)
-pip install fastapi uvicorn[standard] pydantic pydantic-settings
-pip install sqlalchemy alembic python-socketio python-multipart
-pip install openai langchain langgraph tavily-python
-pip install python-dotenv httpx aiofiles jinja2
-pip install passlib python-jose[cryptography]
-pip install pytest pytest-asyncio black flake8 mypy
-
-# Generate requirements.txt
-pip freeze > requirements.txt
-
-# Set up environment
+# 2. Configure environment
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env and add your API keys
 
-# Run the backend
-uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
+# 3. Deploy everything!
+./deploy.sh
 ```
 
-#### Frontend Setup
+That's it! 🎉 Your AI Digital Workforce is now running at:
+- 🌐 **Application**: http://localhost
+- 🔧 **API Docs**: http://localhost:8000/docs
+- 🗄️ **Database Admin**: http://localhost:8080
+
+### Alternative: Manual Docker Commands
 
 ```bash
-cd frontend
-npm install
+# Build and start all services
+docker-compose up -d --build
 
-# Set up environment
-cp .env.example .env.local
-# Edit .env.local if needed
+# View logs
+docker-compose logs -f
 
-# Run the frontend
-npm run dev
+# Stop services
+docker-compose down
 ```
 
-</details>
-
-## 🎯 Usage
+## 🎮 See It In Action
 
 ### Creating Your First Task
 
-1. **Open the dashboard** at http://localhost:3000
+1. **Open the application** at http://localhost
 2. **Click "Create New Task"**
-3. **Enter your task**, for example:
+3. **Try this example**:
    ```
-   Title: Market Research Report
-   Description: Research the top 5 electric vehicle startups in 2025 and create a comprehensive market analysis report including funding, market position, and growth potential.
+   Title: Market Analysis Report
+   Description: Research the top 5 AI startups in 2024, analyze their 
+   funding, technology stack, and market position. Create a comprehensive 
+   report with recommendations for investors.
    ```
-4. **Watch the magic happen!** 🪄
+4. **Watch the agents collaborate** in real-time!
 
-### Agent Workflow Example
+### How Agents Work Together
 
 ```mermaid
 sequenceDiagram
     participant User
+    participant Supervisor
     participant Researcher
     participant Writer
     participant Analyst
     
-    User->>Researcher: "Research EV startups in 2025"
-    Researcher->>Researcher: Searches web using Tavily API
-    Researcher->>Writer: "Found 5 top startups with data..."
-    Writer->>Writer: Creates structured report
-    Writer->>Analyst: "Here's the draft report..."
-    Analyst->>Analyst: Reviews for quality & accuracy
-    Analyst->>User: "Final polished report ready!"
+    User->>Supervisor: Create market analysis task
+    Supervisor->>Researcher: Assign research phase
+    Researcher->>Researcher: Search web for AI startups
+    Researcher->>Supervisor: Found 5 startups with data
+    Supervisor->>Writer: Create report from research
+    Writer->>Writer: Draft comprehensive report
+    Writer->>Supervisor: Report draft ready
+    Supervisor->>Analyst: Review and refine
+    Analyst->>Analyst: Enhance quality & accuracy
+    Analyst->>User: Final report delivered! 📊
 ```
 
-### Human Intervention
+## 📚 Documentation
 
-At any point during the workflow, you can:
-- **Provide guidance**: "Focus more on European companies"
-- **Ask questions**: "What about Tesla's impact on these startups?"
-- **Redirect**: "Also include battery technology analysis"
+### Environment Configuration
 
-## 📚 API Documentation
+Create a `.env` file with the following:
 
-The backend provides comprehensive OpenAPI documentation:
+```env
+# Required API Keys
+OPENAI_API_KEY=sk-...your-key-here
+TAVILY_API_KEY=tvly-...your-key-here
 
-- **Interactive Docs**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
+# MySQL Configuration (Docker)
+MYSQL_ROOT_PASSWORD=secure_password_here
+MYSQL_DATABASE=ai_workforce
+MYSQL_USER=ai_user
+MYSQL_PASSWORD=secure_password_here
 
-### Key Endpoints
+# Application Settings
+SECRET_KEY=your-secret-key-here  # Generate: openssl rand -hex 32
+DEBUG=false
+LOG_LEVEL=INFO
+
+# Service Ports (optional)
+FRONTEND_PORT=80
+BACKEND_PORT=8000
+MYSQL_PORT=3306
+ADMINER_PORT=8080
+```
+
+### API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/tasks/` | POST | Create a new task |
-| `/api/tasks/` | GET | List all tasks |
-| `/api/tasks/{id}` | GET | Get task details |
-| `/api/messages/task/{id}` | GET | Get task conversation |
-| `/socket.io/` | WebSocket | Real-time updates |
+| `/api/tasks/` | POST | Create a new AI task |
+| `/api/tasks/` | GET | List all tasks (paginated) |
+| `/api/tasks/{id}` | GET | Get task details & status |
+| `/api/messages/task/{id}` | GET | Get agent conversation |
+| `/socket.io/` | WS | Real-time agent updates |
+| `/docs` | GET | Interactive API documentation |
 
-## 🧪 Testing
+### WebSocket Events
+
+```javascript
+// Connect to real-time updates
+socket.on('agent_message', (data) => {
+  console.log(`${data.agent_role}: ${data.message}`);
+});
+
+socket.on('task_completed', (data) => {
+  console.log('Task finished!', data.deliverable);
+});
+```
+
+## 🚢 Deployment Options
+
+### Deploy to AWS EC2
+
+```bash
+# 1. Launch Ubuntu 22.04 instance (t3.medium or larger)
+# 2. SSH into instance
+ssh -i your-key.pem ubuntu@your-ec2-ip
+
+# 3. Install Docker
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker ubuntu
+
+# 4. Clone and deploy
+git clone https://github.com/automate/ai-digital-workforce.git
+cd ai-digital-workforce
+cp .env.example .env
+# Configure your .env file
+./deploy.sh
+```
+
+### Deploy to DigitalOcean
+
+Use our one-click deploy button or follow the EC2 instructions with a Ubuntu droplet.
+
+### Deploy to Railway/Render
+
+Check our [deployment guide](DEPLOYMENT.md) for platform-specific instructions.
+
+## 🧪 Development Setup
+
+<details>
+<summary>Local Development Instructions</summary>
+
+### Backend Development
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+# Add your API keys to .env
+uvicorn main:socket_app --reload --host 0.0.0.0 --port 8000
+```
+
+### Frontend Development
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Running Tests
 
 ```bash
 # Backend tests
@@ -213,108 +306,30 @@ cd frontend
 npm test
 
 # Integration tests
-docker-compose -f docker-compose.test.yml up --build
+docker-compose -f docker-compose.test.yml up
 ```
 
-## 🛠️ Development
-
-### Project Structure
-
-```
-ai-digital-workforce/
-├── 📁 backend/              # FastAPI backend
-│   ├── 📁 app/
-│   │   ├── 📁 agents/       # AI agent implementations
-│   │   ├── 📁 api/          # REST API routes
-│   │   ├── 📁 models/       # Database models
-│   │   ├── 📁 schemas/      # Pydantic schemas
-│   │   └── 📁 websocket/    # WebSocket handling
-│   ├── 🐳 Dockerfile
-│   └── 📄 requirements.txt
-├── 📁 frontend/             # React frontend
-│   ├── 📁 src/
-│   │   ├── 📁 components/   # React components
-│   │   ├── 📁 pages/        # Route pages
-│   │   ├── 📁 hooks/        # Custom hooks
-│   │   └── 📁 services/     # API services
-│   ├── 🐳 Dockerfile
-│   └── 📄 package.json
-├── 🐳 docker-compose.yml   # Production setup
-├── 🐳 docker-compose.dev.yml # Development setup
-└── 📄 README.md            # You are here!
-```
-
-### Adding New Agents
-
-1. Create agent class in `backend/app/agents/`
-2. Add agent role to `AgentRole` enum
-3. Update orchestrator workflow
-4. Add agent avatar in `frontend/public/agents/`
-
-### Environment Variables
-
-#### Backend (.env)
-```bash
-OPENAI_API_KEY=your_key_here          # Required
-TAVILY_API_KEY=your_key_here          # Required  
-SECRET_KEY=your_secret_here           # Required
-DATABASE_URL=sqlite:///./data/database.db
-DEBUG=true
-```
-
-#### Frontend (.env.local)
-```bash
-VITE_API_URL=http://localhost:8000
-VITE_WS_URL=ws://localhost:8000
-VITE_ENABLE_DEBUG=true
-```
-
-## 🚢 Deployment
-
-### Production Deployment
-
-1. **Prepare environment**
-   ```bash
-   cp .env.example .env
-   # Add production API keys and settings
-   ```
-
-2. **Deploy with Docker Compose**
-   ```bash
-   docker-compose up -d --build
-   ```
-
-3. **Set up reverse proxy** (optional)
-   - Configure nginx/Apache to proxy requests
-   - Set up SSL certificates with Let's Encrypt
-
-### Cloud Deployment Options
-
-- **Backend**: Railway, Render, Fly.io
-- **Frontend**: Vercel, Netlify, Cloudflare Pages
-- **Database**: PostgreSQL on Railway/Supabase for production
+</details>
 
 ## 🤝 Contributing
 
-We love contributions! See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines.
-
-### Quick Contribution Steps
+We welcome contributions! AutoMate believes in building together with the community.
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm test` and `pytest`
-5. Commit changes: `git commit -m 'Add amazing feature'`
-6. Push to branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📋 Roadmap
+## 🗺️ Roadmap
 
-- [ ] **v0.2.0**: Custom agent creation
-- [ ] **v0.3.0**: Voice mode (STT/TTS)
-- [ ] **v0.4.0**: Multi-task orchestration
-- [ ] **v0.5.0**: API marketplace integrations
-- [ ] **v1.0.0**: SaaS platform launch
+- [x] **v0.1.0** - Multi-agent orchestration with LangGraph
+- [x] **v0.2.0** - Real-time WebSocket updates
+- [x] **v0.3.0** - Docker deployment ready
+- [ ] **v0.4.0** - Custom agent creation UI
+- [ ] **v0.5.0** - Voice interaction mode
+- [ ] **v0.6.0** - Agent marketplace
+- [ ] **v1.0.0** - Enterprise features
 
 ## 🆘 Troubleshooting
 
@@ -323,28 +338,27 @@ We love contributions! See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guideli
 
 ### Docker Issues
 
-**Problem**: `docker-compose up` fails
 ```bash
-# Solution: Clean and rebuild
-docker-compose down
+# Reset everything
+docker-compose down -v
 docker system prune -f
 docker-compose up --build
 ```
 
-### API Key Issues
-
-**Problem**: "OpenAI API key not found"
-```bash
-# Check your .env file exists and has the key
-cat .env | grep OPENAI_API_KEY
-```
-
 ### Port Conflicts
 
-**Problem**: "Port 3000 already in use"
 ```bash
-# Change ports in docker-compose.yml or kill existing processes
-lsof -ti:3000 | xargs kill -9
+# Change ports in .env file
+FRONTEND_PORT=3000
+BACKEND_PORT=8001
+```
+
+### Database Connection
+
+```bash
+# Check MySQL is running
+docker-compose ps mysql
+docker-compose logs mysql
 ```
 
 </details>
@@ -355,25 +369,34 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [FastAPI](https://fastapi.tiangolo.com/) for the amazing backend framework
-- [React](https://reactjs.org/) for the frontend library
-- [LangChain](https://langchain.com/) for AI/LLM integrations
-- [Tailwind CSS](https://tailwindcss.com/) for beautiful styling
-- [OpenAI](https://openai.com/) for GPT models
+- [LangChain](https://langchain.com/) & [LangGraph](https://github.com/langchain-ai/langgraph) for the orchestration framework
+- [OpenAI](https://openai.com/) for GPT-4o-mini
 - [Tavily](https://tavily.com/) for web search capabilities
+- [FastAPI](https://fastapi.tiangolo.com/) for the amazing backend framework
+- [React](https://reactjs.org/) team for React 19
 
-## 📬 Contact
+## 👥 About AutoMate
 
-- **GitHub**: [AutoMate Organization](https://github.com/automate)
-- **Email**: contact@automate.com
-- **Website**: https://automate.com
+**[AutoMate](https://automate.com)** is your AI Automation Partner, specializing in building intelligent automation solutions that transform how businesses operate. We believe in the power of AI to augment human capabilities, not replace them.
+
+### Our Mission
+Democratize AI automation by creating tools that are powerful yet accessible, enabling businesses of all sizes to leverage the power of artificial intelligence.
+
+### Connect With Us
+- 🌐 **Website**: [automate.com](https://automate.com)
+- 📧 **Email**: hello@automate.com
+- 💼 **LinkedIn**: [AutoMate AI](https://linkedin.com/company/automate-ai)
+- 🐦 **Twitter**: [@AutoMateAI](https://twitter.com/AutoMateAI)
+- 💬 **Discord**: [Join our community](https://discord.gg/automate)
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by AutoMate Team**
+### 🌟 **Star us on GitHub to support the project!**
 
-[⭐ Star us on GitHub](https://github.com/automate/ai-digital-workforce) • [🐛 Report Bug](https://github.com/automate/ai-digital-workforce/issues) • [💡 Request Feature](https://github.com/automate/ai-digital-workforce/issues)
+**Built with ❤️ by [AutoMate](https://automate.com) - Your AI Automation Partner**
+
+[⭐ Star](https://github.com/automate/ai-digital-workforce) • [🐛 Report Bug](https://github.com/automate/ai-digital-workforce/issues) • [💡 Request Feature](https://github.com/automate/ai-digital-workforce/issues) • [📖 Docs](https://docs.automate.com)
 
 </div>

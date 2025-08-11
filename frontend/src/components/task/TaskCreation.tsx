@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, Loader2 } from 'lucide-react';
-import { taskApi } from '../../services/api';
-import type { TaskCreate } from '../../types';
+import {
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress
+} from '@mui/material';
+import { Send as SendIcon } from '@mui/icons-material';
+import { taskApi } from '@services/api';
+import type { TaskCreate } from '@/types';
 
 export const TaskCreation: React.FC = () => {
   const navigate = useNavigate();
@@ -34,64 +44,53 @@ export const TaskCreation: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Task</h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-            Task Title
-          </label>
-          <input
-            type="text"
-            id="title"
+    <Card elevation={2} sx={{ maxWidth: 'md', mx: 'auto' }}>
+      <CardContent>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Create New Task
+        </Typography>
+        
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <TextField
+            fullWidth
+            label="Task Title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             placeholder="e.g., Market Research on EV Startups"
             disabled={loading}
+            sx={{ mb: 3 }}
           />
-        </div>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            id="description"
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label="Description"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             placeholder="Describe what you want the AI agents to accomplish..."
             disabled={loading}
+            sx={{ mb: 3 }}
           />
-        </div>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-            {error}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full flex items-center justify-center space-x-2 bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Creating Task...</span>
-            </>
-          ) : (
-            <>
-              <Send className="h-4 w-4" />
-              <span>Create Task</span>
-            </>
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
           )}
-        </button>
-      </form>
-    </div>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            startIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
+            size="large"
+          >
+            {loading ? 'Creating Task...' : 'Create Task'}
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };

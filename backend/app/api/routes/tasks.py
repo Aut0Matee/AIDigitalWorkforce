@@ -45,26 +45,43 @@ async def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     Returns:
         TaskResponse: Created task with generated ID and metadata
     """
-    db_task = Task(
-        title=task.title,
-        description=task.description,
-        status=TaskStatus.CREATED
-    )
+    try:
+        db_task = Task(
+            title=task.title,
+            description=task.description,
+            status=TaskStatus.CREATED
+        )
+        
+        db.add(db_task)
+        db.commit()
+        db.refresh(db_task)
+        
+        # Trigger agent workflow processing (non-blocking)
+        try:
+            from app.services.task_service import get_task_service
+            task_service = get_task_service()
+            
+            # Process task in background
+            import asyncio
+            loop = asyncio.get_event_loop()
+            loop.create_task(task_service.process_task_async(db_task.id))
+        except Exception as e:
+            # Log error but don't fail task creation
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Failed to start task processing: {str(e)}")
+        
+        return db_task
     
-    db.add(db_task)
-    db.commit()
-    db.refresh(db_task)
-    
-    # Trigger agent workflow processing
-    from app.services.task_service import get_task_service
-    task_service = get_task_service()
-    
-    # Process task in background
-    import asyncio
-    loop = asyncio.get_event_loop()
-    loop.create_task(task_service.process_task_async(db_task.id))
-    
-    return db_task
+    except Exception as e:
+        db.rollback()
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Failed to create task: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to create task: {str(e)}"
+        )
 
 
 @router.get(
@@ -100,23 +117,32 @@ async def list_tasks(
     Returns:
         TaskListResponse: Paginated list of tasks with metadata
     """
-    query = db.query(Task)
-    
-    if status:
-        query = query.filter(Task.status == status)
-    
-    # Get total count for pagination
-    total = query.count()
-    
-    # Apply pagination and ordering
-    tasks = query.order_by(Task.created_at.desc()).offset((page - 1) * size).limit(size).all()
-    
-    return TaskListResponse(
-        tasks=tasks,
-        total=total,
-        page=page,
-        size=size
-    )
+    try:
+        query = db.query(Task)
+        
+        if status:
+            query = query.filter(Task.status == status)
+        
+        # Get total count for pagination
+        total = query.count()
+        
+        # Apply pagination and ordering
+        tasks = query.order_by(Task.created_at.desc()).offset((page - 1) * size).limit(size).all()
+        
+        return TaskListResponse(
+            tasks=tasks,
+            total=total,
+            page=page,
+            size=size
+        )
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Failed to list tasks: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve tasks: {str(e)}"
+        )
 
 
 @router.get(

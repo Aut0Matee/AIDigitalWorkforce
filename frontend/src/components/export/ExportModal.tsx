@@ -1,5 +1,25 @@
 import React from 'react';
-import { X, Download, FileText, FileCode } from 'lucide-react';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  Typography,
+  Box
+} from '@mui/material';
+import {
+  Close as CloseIcon,
+  PictureAsPdf as PDFIcon,
+  Code as CodeIcon,
+  Download as DownloadIcon
+} from '@mui/icons-material';
 import jsPDF from 'jspdf';
 
 interface ExportModalProps {
@@ -10,8 +30,6 @@ interface ExportModalProps {
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, content, title }) => {
-  if (!isOpen) return null;
-
   const handleExportPDF = () => {
     const pdf = new jsPDF();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -39,6 +57,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, conte
     });
 
     pdf.save(`${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
+    onClose();
   };
 
   const handleExportMarkdown = () => {
@@ -51,61 +70,65 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, conte
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onClose} />
-
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Export Deliverable</h3>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-500 focus:outline-none"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <p className="text-sm text-gray-600 mb-6">
-              Choose a format to export your deliverable:
-            </p>
-
-            <div className="space-y-3">
-              <button
-                onClick={handleExportPDF}
-                className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              >
-                <div className="flex items-center space-x-3">
-                  <FileText className="h-5 w-5 text-red-600" />
-                  <div className="text-left">
-                    <p className="text-sm font-medium text-gray-900">PDF Document</p>
-                    <p className="text-xs text-gray-500">Download as PDF file</p>
-                  </div>
-                </div>
-                <Download className="h-4 w-4 text-gray-400" />
-              </button>
-
-              <button
-                onClick={handleExportMarkdown}
-                className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              >
-                <div className="flex items-center space-x-3">
-                  <FileCode className="h-5 w-5 text-gray-600" />
-                  <div className="text-left">
-                    <p className="text-sm font-medium text-gray-900">Markdown</p>
-                    <p className="text-xs text-gray-500">Download as .md file</p>
-                  </div>
-                </div>
-                <Download className="h-4 w-4 text-gray-400" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          Export Deliverable
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={onClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          Choose a format to export your deliverable:
+        </Typography>
+        
+        <List sx={{ mt: 2 }}>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleExportPDF}>
+              <ListItemIcon>
+                <PDFIcon color="error" />
+              </ListItemIcon>
+              <ListItemText
+                primary="PDF Document"
+                secondary="Download as PDF file"
+              />
+              <DownloadIcon color="action" />
+            </ListItemButton>
+          </ListItem>
+          
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleExportMarkdown}>
+              <ListItemIcon>
+                <CodeIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Markdown"
+                secondary="Download as .md file"
+              />
+              <DownloadIcon color="action" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+      </DialogActions>
+    </Dialog>
   );
 };

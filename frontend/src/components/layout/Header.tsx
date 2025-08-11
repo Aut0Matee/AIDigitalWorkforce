@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bot, Activity } from 'lucide-react';
-import { socketService } from '../../services/socket';
+import { AppBar, Toolbar, Typography, Box, Chip, IconButton } from '@mui/material';
+import { SmartToy as BotIcon, Wifi as WifiIcon, WifiOff as WifiOffIcon } from '@mui/icons-material';
+import { socketService } from '@services/socket';
 
 export const Header: React.FC = () => {
   const [isConnected, setIsConnected] = React.useState(false);
@@ -20,24 +21,31 @@ export const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <Bot className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-gray-900">AI Digital Workforce</span>
-          </Link>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Activity className={`h-4 w-4 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />
-              <span className="text-sm text-gray-600">
-                {isConnected ? 'Connected' : 'Disconnected'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    <AppBar position="sticky" elevation={1}>
+      <Toolbar>
+        <Box display="flex" alignItems="center" flexGrow={1}>
+          <IconButton 
+            component={Link} 
+            to="/" 
+            edge="start" 
+            color="inherit"
+            sx={{ mr: 2 }}
+          >
+            <BotIcon />
+          </IconButton>
+          <Typography variant="h6" component="div">
+            AI Digital Workforce
+          </Typography>
+        </Box>
+        
+        <Chip
+          icon={isConnected ? <WifiIcon /> : <WifiOffIcon />}
+          label={isConnected ? 'Connected' : 'Disconnected'}
+          color={isConnected ? 'success' : 'error'}
+          size="small"
+          variant="outlined"
+        />
+      </Toolbar>
+    </AppBar>
   );
 };

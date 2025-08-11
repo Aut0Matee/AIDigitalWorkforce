@@ -165,14 +165,26 @@ async def notify_task_started(task_id: str, task_data: dict):
     })
 
 
-async def notify_agent_message(task_id: str, agent_role: str, message: str):
+async def notify_agent_message(task_id: str, message_data: dict):
     """Notify clients of a new agent message."""
-    await connection_manager.broadcast_to_task(task_id, "agent_message", {
-        "task_id": task_id,
-        "agent_role": agent_role,
-        "message": message,
-        "timestamp": str(datetime.utcnow())
-    })
+    # Support both dict and individual parameters
+    if isinstance(message_data, dict):
+        # Ensure 'message' field exists for frontend compatibility
+        if 'content' in message_data and 'message' not in message_data:
+            message_data['message'] = message_data['content']
+        
+        await connection_manager.broadcast_to_task(task_id, "agent_message", {
+            "task_id": task_id,
+            **message_data
+        })
+    else:
+        # Legacy support
+        await connection_manager.broadcast_to_task(task_id, "agent_message", {
+            "task_id": task_id,
+            "agent_role": message_data,
+            "message": "",
+            "timestamp": str(datetime.utcnow())
+        })
 
 
 async def notify_task_completed(task_id: str, deliverable: str):

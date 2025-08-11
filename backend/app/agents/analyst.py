@@ -97,7 +97,7 @@ class AnalystAgent(BaseAgent):
             
             await self.send_message(
                 task_id,
-                f"Content refinement completed!\n\n{summary}"
+                f"Content refinement completed!\n\n**Assessment Summary:**\n{summary}\n\n**Refined Content:**\n{refined_content}"
             )
             
             return {

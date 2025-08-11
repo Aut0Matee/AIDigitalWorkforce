@@ -88,11 +88,10 @@ class WriterAgent(BaseAgent):
             # Create metadata about the content
             metadata = await self._generate_content_metadata(content)
             
-            # Send completion message with preview
-            preview = content[:500] + "..." if len(content) > 500 else content
+            # Send completion message with full content
             await self.send_message(
                 task_id,
-                f"Content creation completed!\n\n**Preview:**\n{preview}\n\n**Content Stats:**\n- Word count: {metadata['word_count']}\n- Sections: {metadata['sections']}\n- Reading time: {metadata['reading_time']}"
+                f"Content creation completed!\n\n**Full Content:**\n{content}\n\n**Content Stats:**\n- Word count: {metadata['word_count']}\n- Sections: {metadata['sections']}\n- Reading time: {metadata['reading_time']}"
             )
             
             return {
@@ -198,7 +197,8 @@ Write the complete content now:"""
         content = await self.llm_client.generate(
             system_prompt=self.system_prompt,
             user_prompt=prompt,
-            temperature=0.7  # Slightly more creative for writing
+            temperature=0.7,  # Slightly more creative for writing
+            max_tokens=4000   # Adjusted for gpt-4o-mini compatibility
         )
         
         return content
@@ -249,7 +249,8 @@ Keep it professional and acknowledge any limitations in the information."""
         
         content = await self.llm_client.generate(
             system_prompt=self.system_prompt,
-            user_prompt=prompt
+            user_prompt=prompt,
+            max_tokens=2000   # Adjusted for fallback content
         )
         
         return content

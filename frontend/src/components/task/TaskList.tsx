@@ -1,9 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, FileText, Calendar } from 'lucide-react';
-import type { Task } from '../../types';
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Paper,
+  Typography,
+  Box,
+  Chip
+} from '@mui/material';
+import {
+  ChevronRight as ChevronRightIcon,
+  Description as FileTextIcon,
+  CalendarMonth as CalendarIcon,
+  CheckCircle as CheckIcon
+} from '@mui/icons-material';
+import type { Task } from '@/types';
 import { TaskStatus } from './TaskStatus';
-import { formatDate } from '../../utils/date';
+import { formatDate } from '@utils/date';
 
 interface TaskListProps {
   tasks: Task[];
@@ -12,54 +27,75 @@ interface TaskListProps {
 export const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-500">No tasks yet. Create your first task to get started!</p>
-      </div>
+      <Paper elevation={1} sx={{ p: 4, textAlign: 'center' }}>
+        <FileTextIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+        <Typography color="text.secondary">
+          No tasks yet. Create your first task to get started!
+        </Typography>
+      </Paper>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <ul className="divide-y divide-gray-200">
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <Link
-              to={`/task/${task.id}`}
-              className="block hover:bg-gray-50 px-6 py-4 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-medium text-gray-900 truncate">
+    <Paper elevation={1}>
+      <List disablePadding>
+        {tasks.map((task, index) => (
+          <ListItem
+            key={task.id}
+            divider={index < tasks.length - 1}
+            disablePadding
+          >
+            <ListItemButton component={Link} to={`/task/${task.id}`}>
+              <ListItemText
+                primary={
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <Typography variant="h6" component="h3" sx={{ flexGrow: 1 }}>
                       {task.title}
-                    </h3>
+                    </Typography>
                     <TaskStatus status={task.status} />
-                  </div>
-                  
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                    {task.description}
-                  </p>
-                  
-                  <div className="flex items-center text-xs text-gray-500 space-x-4">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="h-3 w-3" />
-                      <span>{formatDate(task.created_at)}</span>
-                    </div>
-                    {task.deliverable && (
-                      <span className="text-green-600 font-medium">
-                        ✓ Deliverable ready
-                      </span>
-                    )}
-                  </div>
-                </div>
-                
-                <ChevronRight className="h-5 w-5 text-gray-400 ml-4" />
-              </div>
-            </Link>
-          </li>
+                  </Box>
+                }
+                secondary={
+                  <>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        mb: 1
+                      }}
+                    >
+                      {task.description}
+                    </Typography>
+                    <Box display="flex" alignItems="center" gap={2}>
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <CalendarIcon sx={{ fontSize: 16 }} />
+                        <Typography variant="caption">
+                          {formatDate(task.created_at)}
+                        </Typography>
+                      </Box>
+                      {task.deliverable && (
+                        <Chip
+                          icon={<CheckIcon />}
+                          label="Deliverable ready"
+                          size="small"
+                          color="success"
+                          variant="outlined"
+                        />
+                      )}
+                    </Box>
+                  </>
+                }
+              />
+              <ChevronRightIcon color="action" />
+            </ListItemButton>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 };

@@ -15,7 +15,7 @@ class LLMClient:
     
     def __init__(self):
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)
-        self.default_model = "gpt-4-turbo-preview"
+        self.default_model = "gpt-4o-mini"  # Use gpt-4o-mini as requested
     
     async def generate(
         self,

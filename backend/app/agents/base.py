@@ -52,8 +52,32 @@ class BaseAgent(ABC):
         """
         logger.info(f"{self.name} sending message for task {task_id}: {message[:100]}...")
         
+        # Save message to database
+        from app.database import SessionLocal
+        from app.models.message import Message
+        
+        db = SessionLocal()
+        try:
+            db_message = Message(
+                task_id=task_id,
+                agent_role=self.role,
+                content=message
+            )
+            db.add(db_message)
+            db.commit()
+            logger.info(f"Message saved to database for task {task_id}")
+        except Exception as e:
+            logger.error(f"Failed to save message to database: {str(e)}")
+            db.rollback()
+        finally:
+            db.close()
+        
         # Notify via WebSocket for real-time updates
-        await notify_agent_message(task_id, self.role.value, message)
+        await notify_agent_message(task_id, {
+            "agent_role": self.role.value,
+            "content": message,
+            "timestamp": datetime.utcnow().isoformat()
+        })
         
         # Return message data for storage
         return {

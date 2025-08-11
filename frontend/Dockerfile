@@ -1,5 +1,5 @@
-# Use Node.js 18 alpine image
-FROM node:18-alpine
+# Build stage
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ALL dependencies (including dev) for build
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -16,11 +16,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use nginx to serve the built app
+# Production stage - Use nginx to serve the built app
 FROM nginx:alpine
 
 # Copy built assets from builder stage
-COPY --from=0 /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf

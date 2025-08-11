@@ -1,5 +1,5 @@
-# Use Python 3.11 slim image
-FROM python:3.11-slim
+# Use Python 3.12 slim image for consistency
+FROM python:3.12-slim
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
@@ -8,11 +8,15 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies including MySQL client
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         gcc \
         build-essential \
+        default-libmysqlclient-dev \
+        pkg-config \
+        curl \
+        netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies

@@ -1,63 +1,72 @@
 import React from 'react';
-import { Search, PenTool, Microscope, User, Bot } from 'lucide-react';
-import type { Message } from '../../types';
+import { Avatar } from '@mui/material';
+import {
+  Search as SearchIcon,
+  Edit as PenToolIcon,
+  Science as MicroscopeIcon,
+  Person as UserIcon,
+  SmartToy as BotIcon
+} from '@mui/icons-material';
+import type { Message } from '@/types';
 
 interface AgentAvatarProps {
   role: Message['agent_role'];
-  className?: string;
 }
 
-export const AgentAvatar: React.FC<AgentAvatarProps> = ({ role, className = '' }) => {
+export const AgentAvatar: React.FC<AgentAvatarProps> = ({ role }) => {
   const getAvatarConfig = () => {
     switch (role) {
       case 'researcher':
         return {
-          icon: Search,
-          bgColor: 'bg-blue-500',
+          icon: <SearchIcon />,
+          bgColor: '#2196f3',
           label: 'Researcher',
         };
       case 'writer':
         return {
-          icon: PenTool,
-          bgColor: 'bg-green-500',
+          icon: <PenToolIcon />,
+          bgColor: '#4caf50',
           label: 'Writer',
         };
       case 'analyst':
         return {
-          icon: Microscope,
-          bgColor: 'bg-purple-500',
+          icon: <MicroscopeIcon />,
+          bgColor: '#9c27b0',
           label: 'Analyst',
         };
       case 'human':
         return {
-          icon: User,
-          bgColor: 'bg-gray-500',
+          icon: <UserIcon />,
+          bgColor: '#757575',
           label: 'You',
         };
       case 'system':
         return {
-          icon: Bot,
-          bgColor: 'bg-yellow-500',
+          icon: <BotIcon />,
+          bgColor: '#ff9800',
           label: 'System',
         };
       default:
         return {
-          icon: Bot,
-          bgColor: 'bg-gray-400',
+          icon: <BotIcon />,
+          bgColor: '#9e9e9e',
           label: 'Unknown',
         };
     }
   };
 
   const config = getAvatarConfig();
-  const Icon = config.icon;
 
   return (
-    <div className={`relative ${className}`}>
-      <div className={`w-10 h-10 rounded-full ${config.bgColor} flex items-center justify-center`}>
-        <Icon className="h-5 w-5 text-white" />
-      </div>
-      <span className="sr-only">{config.label}</span>
-    </div>
+    <Avatar
+      sx={{
+        bgcolor: config.bgColor,
+        width: 40,
+        height: 40,
+      }}
+      aria-label={config.label}
+    >
+      {config.icon}
+    </Avatar>
   );
 };

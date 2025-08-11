@@ -106,6 +106,14 @@ app = FastAPI(
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
+    swagger_ui_parameters={
+        "docExpansion": "none",
+        "persistAuthorization": True,
+        "tryItOutEnabled": True,
+        "urls.primaryName": "AI Digital Workforce API",
+    },
+    swagger_ui_init_oauth=None,
+    swagger_ui_standalone_preset=True,
 )
 
 # Add CORS middleware

@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     api_port: int = Field(default=8000, description="API port")
     
     # Database
+    database_type: str = Field(
+        default="sqlite",
+        description="Database type (sqlite or mysql)"
+    )
     database_url: str = Field(
         default="sqlite:///./data/database.db",
         description="Database connection URL"
@@ -26,14 +30,17 @@ class Settings(BaseSettings):
     
     # API Keys
     openai_api_key: str = Field(
+        default="sk-test-key-replace-with-real-key",
         description="OpenAI API key for LLM integration"
     )
     tavily_api_key: str = Field(
+        default="tvly-test-key-replace-with-real-key",
         description="Tavily API key for web search"
     )
     
     # Security
     secret_key: str = Field(
+        default="test-secret-key-change-in-production",
         description="Secret key for JWT tokens and sessions"
     )
     

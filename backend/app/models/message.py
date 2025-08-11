@@ -28,7 +28,7 @@ class Message(BaseModel):
     
     __tablename__ = "messages"
     
-    task_id = Column(String, ForeignKey("tasks.id"), nullable=False, index=True)
+    task_id = Column(String(36), ForeignKey("tasks.id"), nullable=False, index=True)
     agent_role = Column(Enum(AgentRole), nullable=False, index=True)
     content = Column(Text, nullable=False)
     

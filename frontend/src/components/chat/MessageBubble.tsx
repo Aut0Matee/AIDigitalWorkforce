@@ -1,7 +1,9 @@
 import React from 'react';
-import type { Message } from '../../types';
+import { Box, Typography, Paper } from '@mui/material';
+import type { Message } from '@/types';
 import { AgentAvatar } from './AgentAvatar';
-import { formatDistanceToNow } from '../../utils/date';
+import { MarkdownRenderer } from '@components/common/MarkdownRenderer';
+import { formatDistanceToNow } from '@utils/date';
 
 interface MessageBubbleProps {
   message: Message;
@@ -25,35 +27,48 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
     }
   };
 
-  const getBubbleClass = () => {
-    const baseClass = 'rounded-lg p-4 max-w-3xl';
-    const roleClass = `message-bubble-${message.agent_role}`;
-    return `${baseClass} ${roleClass}`;
+  const getBubbleColor = () => {
+    switch (message.agent_role) {
+      case 'researcher':
+        return '#e3f2fd';
+      case 'writer':
+        return '#f3e5f5';
+      case 'analyst':
+        return '#e8f5e9';
+      case 'human':
+        return '#fff3e0';
+      case 'system':
+        return '#fafafa';
+      default:
+        return '#f5f5f5';
+    }
   };
 
   return (
-    <div className="flex space-x-3">
-      <AgentAvatar role={message.agent_role} className="flex-shrink-0" />
+    <Box display="flex" gap={2}>
+      <AgentAvatar role={message.agent_role} />
       
-      <div className="flex-1 space-y-1">
-        <div className="flex items-center space-x-2">
-          <span className="text-sm font-semibold text-gray-900">{getRoleName()}</span>
-          <span className="text-xs text-gray-500">
+      <Box flex={1}>
+        <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+          <Typography variant="subtitle2" fontWeight="bold">
+            {getRoleName()}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
             {formatDistanceToNow(message.created_at)}
-          </span>
-        </div>
+          </Typography>
+        </Box>
         
-        <div className={getBubbleClass()}>
-          <div className="prose prose-sm max-w-none">
-            {message.content.split('\n').map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                {index < message.content.split('\n').length - 1 && <br />}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 2,
+            backgroundColor: getBubbleColor(),
+            borderRadius: 2,
+          }}
+        >
+          <MarkdownRenderer content={message.content} />
+        </Paper>
+      </Box>
+    </Box>
   );
 };

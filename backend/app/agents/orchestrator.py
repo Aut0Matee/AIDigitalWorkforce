@@ -408,6 +408,9 @@ Respond with only the agent name or action."""
             logger.error(f"Error saving message: {str(e)}")
 
 
+# Import the fixed orchestrator
+from app.agents.orchestrator_fixed import MultiAgentOrchestrator as FixedOrchestrator
+
 # Global orchestrator instance
 _orchestrator = None
 
@@ -416,5 +419,6 @@ def get_orchestrator() -> MultiAgentOrchestrator:
     """Get or create the global orchestrator instance."""
     global _orchestrator
     if _orchestrator is None:
-        _orchestrator = MultiAgentOrchestrator()
+        # Use the fixed orchestrator implementation
+        _orchestrator = FixedOrchestrator()
     return _orchestrator

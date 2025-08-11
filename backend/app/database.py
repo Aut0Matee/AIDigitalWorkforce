@@ -5,14 +5,23 @@ Provides database connection, session management, and table creation utilities.
 """
 
 import logging
+import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+# Ensure data directory exists for SQLite
+if settings.database_url.startswith("sqlite"):
+    db_path = settings.database_url.replace("sqlite:///", "")
+    if not db_path.startswith(":memory:"):
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            os.makedirs(db_dir, exist_ok=True)
+            logger.info(f"Created database directory: {db_dir}")
 
 # Create database engine
 if settings.database_url.startswith("sqlite"):
@@ -35,8 +44,8 @@ else:
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create declarative base for models
-Base = declarative_base()
+# Import Base from models.base instead of creating new one
+from app.models.base import Base
 
 
 def get_db():

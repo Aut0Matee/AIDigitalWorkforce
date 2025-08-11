@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Loader2 } from 'lucide-react';
-import type { Message } from '../../types';
+import {
+  Paper,
+  Box,
+  TextField,
+  IconButton,
+  Typography,
+  InputAdornment,
+  CircularProgress
+} from '@mui/material';
+import { Send as SendIcon } from '@mui/icons-material';
+import type { Message } from '@/types';
 import { MessageBubble } from './MessageBubble';
-import { messageApi } from '../../services/api';
-import { socketService } from '../../services/socket';
+import { messageApi } from '@services/api';
+import { socketService } from '@services/socket';
 
 interface ChatWindowProps {
   taskId: string;
@@ -11,7 +20,10 @@ interface ChatWindowProps {
 }
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({ taskId, initialMessages }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  // Filter out any empty messages from initial load
+  const [messages, setMessages] = useState<Message[]>(
+    initialMessages.filter(msg => msg.content && msg.content.trim())
+  );
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -28,14 +40,20 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ taskId, initialMessages 
     // Subscribe to real-time updates
     const handleAgentMessage = (data: any) => {
       if (data.task_id === taskId) {
-        const newMessage: Message = {
-          id: Date.now().toString(),
-          task_id: data.task_id,
-          agent_role: data.agent_role,
-          content: data.message,
-          created_at: data.timestamp,
-        };
-        setMessages(prev => [...prev, newMessage]);
+        // Handle both 'message' and 'content' fields for compatibility
+        const messageContent = data.message || data.content || '';
+        
+        // Only add non-empty messages
+        if (messageContent.trim()) {
+          const newMessage: Message = {
+            id: Date.now().toString(),
+            task_id: data.task_id,
+            agent_role: data.agent_role,
+            content: messageContent,
+            created_at: data.timestamp,
+          };
+          setMessages(prev => [...prev, newMessage]);
+        }
       }
     };
 
@@ -84,44 +102,54 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ taskId, initialMessages 
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+    <Paper elevation={2} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
         {messages.length === 0 ? (
-          <div className="text-center text-gray-500 py-8">
-            <p>Waiting for agents to start working...</p>
-          </div>
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Typography color="text.secondary">
+              Waiting for agents to start working...
+            </Typography>
+          </Box>
         ) : (
           messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))
         )}
         <div ref={messagesEndRef} />
-      </div>
+      </Box>
 
-      <div className="border-t p-4">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Type your message to guide the agents..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            disabled={sending}
-          />
-          <button
-            onClick={handleSend}
-            disabled={!input.trim() || sending}
-            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {sending ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <Send className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
+      <Box sx={{ borderTop: 1, borderColor: 'divider', p: 2 }}>
+        <TextField
+          fullWidth
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          placeholder="Type your message to guide the agents..."
+          disabled={sending}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleSend}
+                  disabled={!input.trim() || sending}
+                  color="primary"
+                >
+                  {sending ? <CircularProgress size={24} /> : <SendIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
+    </Paper>
   );
 };

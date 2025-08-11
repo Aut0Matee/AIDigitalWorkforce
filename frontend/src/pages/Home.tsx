@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { TaskCreation } from '../components/task/TaskCreation';
-import { TaskList } from '../components/task/TaskList';
-import { taskApi } from '../services/api';
-import type { Task } from '../types';
+import {
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+  IconButton,
+  Collapse
+} from '@mui/material';
+import { Add as PlusIcon, Close as CloseIcon } from '@mui/icons-material';
+import { TaskCreation } from '@components/task/TaskCreation';
+import { TaskList } from '@components/task/TaskList';
+import { taskApi } from '@services/api';
+import type { Task } from '@/types';
 
 export const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -27,49 +34,55 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">AI Digital Workforce</h1>
-        <p className="text-lg text-gray-600">
+    <Box sx={{ py: 4 }}>
+      <Box mb={4}>
+        <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
+          AI Digital Workforce
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
           Watch AI agents collaborate in real-time to complete your tasks
-        </p>
-      </div>
+        </Typography>
+      </Box>
 
-      {showCreate ? (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Create New Task</h2>
-            <button
-              onClick={() => setShowCreate(false)}
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              Cancel
-            </button>
-          </div>
+      <Collapse in={showCreate}>
+        <Box mb={4}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Typography variant="h5" component="h2">
+              Create New Task
+            </Typography>
+            <IconButton onClick={() => setShowCreate(false)} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
           <TaskCreation />
-        </div>
-      ) : (
-        <div className="mb-8">
-          <button
-            onClick={() => setShowCreate(true)}
-            className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Create New Task</span>
-          </button>
-        </div>
-      )}
+        </Box>
+      </Collapse>
 
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Tasks</h2>
+      <Collapse in={!showCreate}>
+        <Box mb={4}>
+          <Button
+            variant="contained"
+            startIcon={<PlusIcon />}
+            onClick={() => setShowCreate(true)}
+            size="large"
+          >
+            Create New Task
+          </Button>
+        </Box>
+      </Collapse>
+
+      <Box>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Recent Tasks
+        </Typography>
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-          </div>
+          <Box display="flex" justifyContent="center" py={6}>
+            <CircularProgress />
+          </Box>
         ) : (
           <TaskList tasks={tasks} />
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
